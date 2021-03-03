@@ -44,5 +44,5 @@ print(off)
 piegraph<- c(on,off)
 lables <- c("Online","Offline")
 pie(piegraph,lables,main="Percent of sales channel",cex=0.8,col = rainbow(length(piegraph)))
-
-
+input <- salesrecord[,c('Total Revenue','Total Cost')]
+plot(x=input$`Total Revenue`,y=input$`Total Cost`,xlab = "Total revenue",ylab = "Total cost",main = "Cost vs Revenue")
