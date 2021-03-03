@@ -39,10 +39,25 @@ print(on)
 ##number of offline sales channel
 offline <- filter(salesrecord,`Sales Channel`==1)
 off <- nrow(offline)
-#number of ffline sales channel
+#number of offline sales channel
 print(off)
 piegraph<- c(on,off)
 lables <- c("Online","Offline")
 pie(piegraph,lables,main="Percent of sales channel",cex=0.8,col = rainbow(length(piegraph)))
+#Linearregression and predicition between revenue and profit
 input <- salesrecord[,c('Total Revenue','Total Cost')]
 plot(x=input$`Total Revenue`,y=input$`Total Cost`,xlab = "Total revenue",ylab = "Total cost",main = "Cost vs Revenue")
+x<- c(salesrecord$`Total Revenue`)
+y<- c(salesrecord$`Total Profit`)
+linearregression <- lm(y~x)
+print(linearregression)
+summary(linearregression)
+a <- data.frame(x=140914.56)
+result <- predict(linearregression,a)
+print(result)
+plot(y,x,col="blue",main = "Profit and Revenue Regression",abline(lm(x~y)),cex=1.3,pch=16,xlab="Revenue",ylab = "Profit")
+#multipleregression between TR and Us,Up,Uc
+input <- salesrecord[,c("Total Revenue","Units Sold","Unit Price","Unit Cost")]
+model <- lm(`Total Revenue`~`Units Sold`+`Unit Price`+`Unit Cost`,data = input)
+summary(model)
+print(model)
