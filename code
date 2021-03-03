@@ -28,6 +28,7 @@ print(max(salesrecord$`Total Profit`))
 print(subset(salesrecord,`Total Profit`== max(salesrecord$`Total Profit`)))
 totalprofit <- salesrecord$`Total Profit`
 hist(totalprofit)
+plot(totalprofit,type = "o",main = "lineplot of total profit")
 #sales channel analysis
 #coded online as 0 and offline as 1
 #number of online sales channel
@@ -43,4 +44,5 @@ print(off)
 piegraph<- c(on,off)
 lables <- c("Online","Offline")
 pie(piegraph,lables,main="Percent of sales channel",cex=0.8,col = rainbow(length(piegraph)))
+
 
