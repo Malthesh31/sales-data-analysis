@@ -1,0 +1,46 @@
+#insatlling libraries which are required
+library("dplyr")
+library("ggplot2")
+library("tidyr")
+library("broom")
+library("forecast")
+library("gbm")
+#importing data sets in the form xlsx
+library(readxl)
+salesrecord <- read_excel("salesrecord.xlsx")
+View(salesrecord)
+#getting basic structure and details of salesrecord
+str(salesrecord)
+nrow(salesrecord)
+ncol(salesrecord)
+head(salesrecord)
+#caluclating mean of quants
+mean(salesrecord$`Units Sold`)
+mean(salesrecord$`Unit Price`)
+mean(salesrecord$`Total Revenue`)
+mean(salesrecord$`Total Cost`)
+mean(salesrecord$`Total Profit`)
+#getting deatils of details of highest revenue earned country and region
+print(max(salesrecord$`Total Revenue`))
+print(subset(salesrecord,`Total Revenue`== max(salesrecord$`Total Revenue`)))
+#getting deatils of highest profit earned country and region
+print(max(salesrecord$`Total Profit`))
+print(subset(salesrecord,`Total Profit`== max(salesrecord$`Total Profit`)))
+totalprofit <- salesrecord$`Total Profit`
+hist(totalprofit)
+#sales channel analysis
+#coded online as 0 and offline as 1
+#number of online sales channel
+online <- filter(salesrecord,`Sales Channel`==0)
+on <- nrow(online)
+#number of online sales channel
+print(on)
+##number of offline sales channel
+offline <- filter(salesrecord,`Sales Channel`==1)
+off <- nrow(offline)
+#number of ffline sales channel
+print(off)
+piegraph<- c(on,off)
+lables <- c("Online","Offline")
+pie(piegraph,lables,main="Percent of sales channel",cex=0.8,col = rainbow(length(piegraph)))
+
