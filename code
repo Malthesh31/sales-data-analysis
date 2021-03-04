@@ -7,50 +7,66 @@ library("forecast")
 library("gbm")
 library("dplyr")
 #importing data sets in the form xlsx
+
 library(readxl)
 salesrecord <- read_excel("salesrecord.xlsx")
 View(salesrecord)
+
 #getting basic structure and details of salesrecord
+
 str(salesrecord)
 nrow(salesrecord)
 ncol(salesrecord)
 head(salesrecord)
+dim(salesrecord)
+itemtypecount<- table(salesrecord$`Item Type`)
+View(itemtypecount)
+pie(itemtypecount,main = "Item distrubtion chart",col = "orange")
+
+#sales channel analysis
+#coded SALES CHANNEL online as 0 and offline as 1
+
+saleschannelcount<- table(salesrecord$`Sales Channel`)
+View(saleschannelcount)
+pie(saleschannelcount)
+
 #caluclating mean of quants
+
 mean(salesrecord$`Units Sold`)
 mean(salesrecord$`Unit Price`)
 mean(salesrecord$`Total Revenue`)
 mean(salesrecord$`Total Cost`)
 mean(salesrecord$`Total Profit`)
+
 #getting deatils of details of highest revenue earned country and region
+
 print(max(salesrecord$`Total Revenue`))
 print(subset(salesrecord,`Total Revenue`== max(salesrecord$`Total Revenue`)))
+
 #getting deatils of highest profit earned country and region
+
 print(max(salesrecord$`Total Profit`))
 print(subset(salesrecord,`Total Profit`== max(salesrecord$`Total Profit`)))
 totalprofit <- salesrecord$`Total Profit`
 hist(totalprofit)
 plot(totalprofit,type = "o",main = "lineplot of total profit")
-#sales channel analysis
-#coded SALES CHANNEL online as 0 and offline as 1
-#number of online sales channel
-online <- filter(salesrecord,`Sales Channel`==0)
-on <- nrow(online)
-#number of online sales channel
-print(on)
-##number of offline sales channel
-offline <- filter(salesrecord,`Sales Channel`==1)
-off <- nrow(offline)
-#number of offline sales channel
-print(off)
-piegraph<- c(on,off)
-lables <- c("Online","Offline")
-pie(piegraph,lables,main="Percent of sales channel",cex=0.8,col = rainbow(length(piegraph)))
+
+#plot of units sold
+
+us<- arrange(salesrecord,desc(`Units Sold`))
+View(us)
+hist(salesrecord$`Units Sold`,main = "Number of units sold",xlab = "units sold",xlim = c(0,10000),col = "green",ylim = c(0,600),breaks = 20)
+
 #arranging in ascending order of profit
+
 profitasc <- arrange(salesrecord,`Total Profit`)
 View(profitasc)
+
 #arranging in descending order of profit
+
 profitdesc <- arrange(salesrecord,desc(`Total Profit`))
 View(profitdesc)
+
 #datamanipulation of item type and saleschannel
 View(salesrecord$`Item Type`)
 #babyfod
@@ -98,6 +114,7 @@ View(cloffline)
 #similarly to all item type to get on what channel sales of particular item is more
 
 #Linearregression and prediction between revenue and profit
+
 input <- salesrecord[,c('Total Revenue','Total Cost')]
 plot(x=input$`Total Revenue`,y=input$`Total Cost`,xlab = "Total revenue",ylab = "Total cost",main = "Cost vs Revenue")
 x<- c(salesrecord$`Total Revenue`)
@@ -109,9 +126,10 @@ a <- data.frame(x=140914.56)
 result <- predict(linearregression,a)
 print(result)
 plot(y,x,col="blue",main = "Profit and Revenue Regression",abline(lm(x~y)),cex=1.3,pch=16,xlab="Revenue",ylab = "Profit")
+
 #multipleregression between TR and Us,Up,Uc
+
 input <- salesrecord[,c("Total Revenue","Units Sold","Unit Price","Unit Cost")]
 model <- lm(`Total Revenue`~`Units Sold`+`Unit Price`+`Unit Cost`,data = input)
 summary(model)
 print(model)
-
