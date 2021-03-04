@@ -5,6 +5,7 @@ library("tidyr")
 library("broom")
 library("forecast")
 library("gbm")
+library("dplyr")
 #importing data sets in the form xlsx
 library(readxl)
 salesrecord <- read_excel("salesrecord.xlsx")
@@ -30,7 +31,7 @@ totalprofit <- salesrecord$`Total Profit`
 hist(totalprofit)
 plot(totalprofit,type = "o",main = "lineplot of total profit")
 #sales channel analysis
-#coded online as 0 and offline as 1
+#coded SALES CHANNEL online as 0 and offline as 1
 #number of online sales channel
 online <- filter(salesrecord,`Sales Channel`==0)
 on <- nrow(online)
@@ -44,7 +45,59 @@ print(off)
 piegraph<- c(on,off)
 lables <- c("Online","Offline")
 pie(piegraph,lables,main="Percent of sales channel",cex=0.8,col = rainbow(length(piegraph)))
-#Linearregression and predicition between revenue and profit
+#arranging in ascending order of profit
+profitasc <- arrange(salesrecord,`Total Profit`)
+View(profitasc)
+#arranging in descending order of profit
+profitdesc <- arrange(salesrecord,desc(`Total Profit`))
+View(profitdesc)
+#datamanipulation of item type and saleschannel
+View(salesrecord$`Item Type`)
+#babyfod
+bbyfonline <- filter(salesrecord,`Item Type`=="Baby Food" & `Sales Channel`==0)
+nrow(bbyfonline)
+View(bbyfonline)
+bbyfoffline <- filter(salesrecord,`Item Type`=="Baby Food" & `Sales Channel`==1)
+nrow(bbyfoffline)
+View(bbyfoffline)
+#Snacks
+snconline <- filter(salesrecord,`Item Type`=="Snacks" & `Sales Channel`==0)
+nrow(snconline)
+View(sncfonline)
+sncoffline <- filter(salesrecord,`Item Type`=="Snacks" & `Sales Channel`==1)
+nrow(sncoffline)
+View(sncoffline)
+#Beverages
+bvgonline <- filter(salesrecord,`Item Type`=="Beverages" & `Sales Channel`==0)
+nrow(bvgonline)
+View(bvgfonline)
+bvgoffline <- filter(salesrecord,`Item Type`=="Beverages" & `Sales Channel`==1)
+nrow(bvgoffline)
+View(bvgoffline)
+#Cereal
+cronline <- filter(salesrecord,`Item Type`=="Cereal" & `Sales Channel`==0)
+nrow(cronline)
+View(crfonline)
+croffline <- filter(salesrecord,`Item Type`=="Cereal" & `Sales Channel`==1)
+nrow(croffline)
+View(croffline)
+#Personal Care
+pconline <- filter(salesrecord,`Item Type`=="Personal Care" & `Sales Channel`==0)
+nrow(pconline)
+View(pconline)
+pcoffline <- filter(salesrecord,`Item Type`=="Personal Care" & `Sales Channel`==1)
+nrow(pcoffline)
+View(pcoffline)
+#Clothes
+clonline <- filter(salesrecord,`Item Type`=="Clothes" & `Sales Channel`==0)
+nrow(clonline)
+View(clonline)
+cloffline <- filter(salesrecord,`Item Type`=="Clothes" & `Sales Channel`==1)
+nrow(cloffline)
+View(cloffline)
+#similarly to all item type to get on what channel sales of particular item is more
+
+#Linearregression and prediction between revenue and profit
 input <- salesrecord[,c('Total Revenue','Total Cost')]
 plot(x=input$`Total Revenue`,y=input$`Total Cost`,xlab = "Total revenue",ylab = "Total cost",main = "Cost vs Revenue")
 x<- c(salesrecord$`Total Revenue`)
@@ -61,3 +114,4 @@ input <- salesrecord[,c("Total Revenue","Units Sold","Unit Price","Unit Cost")]
 model <- lm(`Total Revenue`~`Units Sold`+`Unit Price`+`Unit Cost`,data = input)
 summary(model)
 print(model)
+
